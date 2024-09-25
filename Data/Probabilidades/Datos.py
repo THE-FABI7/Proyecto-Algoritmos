@@ -1,4 +1,4 @@
-class Data:
+class Datos:
 
     def retornarDatosTresNodos(self):
         matProbabilidades = {

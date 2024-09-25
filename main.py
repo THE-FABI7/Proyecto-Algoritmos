@@ -1,11 +1,11 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-
 from Data.Probabilidades.LogicaPB import LogicaPB
 
 
 def main():
     LogicaPB = LogicaPB()
+
 
 # Configuración del icono
 st.set_page_config(
@@ -43,16 +43,18 @@ if selected == "Inicio":
         ["Nuevo Grafo", "Abrir", "Buscar Nodo", "Cerrar", "Guardar",
             "Guardar Como", "Exportar Datos", "Importar Datos", "Salir"]
     )
-    
+
 if selected == "Ejecutar":
     selected_option = st.selectbox(
         "Seleccionar opción:",
         ["Estrategia1", "Estrategia2"]
     )
     if selected_option == 'Estrategia1':
-        opcion = st.radio("Seleccione La matriz con la que desea trabajar", LogicaPB.listaMatrices())
-        estados = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-        futuros = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+        opcion = st.radio(
+            "Seleccione La matriz con la que desea trabajar", LogicaPB.listaMatrices())
+        estados = LogicaPB.retornarEstadosFuturos(
+            LogicaPB.datosMatrices(opcion))
+        futuros = LogicaPB.retornarEstados(LogicaPB.datosMatrices(opcion))
         nodosG1 = st.multiselect(
             "Seleccione los nodos del estado presente", estados)
         nodosG2 = st.multiselect(
@@ -68,7 +70,7 @@ if selected == 'Ayuda':
     st.write("### Ayuda")
     st.write("Para obtener ayuda, comuníquese con el administrador del sistema.")
     st.write("Correo: admin@algoritmos.com")
-    
+
     # Explicación de la aplicación
     st.write("### ¿Qué hace esta aplicación?")
     st.write("""
