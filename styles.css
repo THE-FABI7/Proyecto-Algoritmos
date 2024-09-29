@@ -1,0 +1,37 @@
+.stButton>button {
+    color: #ffffff;
+    background-color: #892BE1;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    display: block;      /* Make the button a block element */
+    margin: 20px auto;   /* Centers the button horizontally */
+    width: 200px;  
+}
+
+/* Hover effects for buttons */
+.stButton>button:hover {
+    background-color: #0af163;
+    color: black;
+}
+
+.css-1y0tads {
+    padding: 0!important;
+}
+
+.css-1d391kg {
+    color: #020202;
+    font-size: 25px;
+}
+
+.css-1v3fvcr {
+    font-size: 16px;
+    text-align: center;
+    margin: 0px;
+    color: #FFFFFF;
+}
+
+.css-16huue1 {
+    background-color: #892BE1;
+}

@@ -2,40 +2,39 @@ from Data.Probabilidades.Datos import Datos
 
 
 class LogicaPB:
-    
-    def datosMatrices(opcion):
-        tres = Datos().retornarDatosTresNodos()
-        cuatro = Datos().retornarDatosCuatroNodos()
-        cinco = Datos().retornarDatosCincoNodos()
-        seis = Datos().retornarDatosSeisNodos()
-        # ocho = Datos().retornarDatosMatrizOchoNodos()
-        # diez = Datos().retornarDatosMatrizDiezNodos()
+
+    def datosMatrices(self, opcion):
+        # Se accede a los datos usando una instancia de Datos
+        datos = Datos()
+        tres = datos.retornarDatosTresNodos()
+        cuatro = datos.retornarDatosCuatroNodos()
+        cinco = datos.retornarDatosCincoNodos()
+        seis = datos.retornarDatosSeisNodos()
+        # ocho = datos.retornarDatosMatrizOchoNodos()
+        # diez = datos.retornarDatosMatrizDiezNodos()
         salida = None
         if opcion == "Tres Nodos":
             salida = tres
-        if opcion == "Cuatro Nodos":
+        elif opcion == "Cuatro Nodos":
             salida = cuatro
-        if opcion == "Cinco Nodos":
-            salida =  cinco
-        if opcion == "Seis Nodos":
-            salida = seis  
-        # if opcion == "Ocho Nodos":
+        elif opcion == "Cinco Nodos":
+            salida = cinco
+        elif opcion == "Seis Nodos":
+            salida = seis
+        # elif opcion == "Ocho Nodos":
             # salida = ocho
-        # if opcion == "Diez Nodos":
+        # elif opcion == "Diez Nodos":
             # salida = diez
         return salida
 
-    def listaMatrices():
-        opcion = ["Tres Nodos", "Cuatro Nodos", "Cinco Nodos",
-                  "Seis Nodos", "Ocho Nodos", "Diez Nodos"]
-        return opcion
-    
-    def retornarEstados(datos):
-        
-        resultado, estados = LogicaPB.generarEstadoTransicion(datos)
+    def listaMatrices(self):
+        return ["Tres Nodos", "Cuatro Nodos", "Cinco Nodos", "Seis Nodos", "Ocho Nodos", "Diez Nodos"]
+
+    def retornarEstados(self, datos):
+        resultado, estados = self.generarEstadoTransicion(datos)
         return estados
-    
-    def generarEstadoTransicion(subconjuntos):
+
+    def generarEstadoTransicion(self, subconjuntos):
         estados = list(subconjuntos.keys())
         transiciones = {}
         estado_actual = [0] * len(estados)
@@ -54,61 +53,16 @@ class LogicaPB:
         aux(0)
         return transiciones, estados
 
-    def retornarEstadosFuturos(datos):
-
-        resultado, estados = LogicaPB.generarEstadoTransicion(datos)
+    def retornarEstadosFuturos(self, datos):
+        resultado, estados = self.generarEstadoTransicion(datos)
         # agregarle a cada valor de los estados una '
         for i in range(len(estados)):
             estados[i] = estados[i] + "'"
-
         return estados
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def retornarValorActual(self, c1, c2, opcion):
+        lista = []
+        matrices = self.datosMatrices(opcion)
+        for j in matrices['A']:
+            lista.append(j)
+        return lista
