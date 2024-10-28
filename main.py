@@ -1,11 +1,15 @@
 import streamlit as st
+from streamlit_agraph import agraph, Node, Edge
 from streamlit_option_menu import option_menu
-from Data.Probabilidades.LogicaPB import LogicaPB
+from src.LogicaPB import LogicaPB
+from src.Estrategia1 import Estrategia1
+import pandas as pd
+from src.gui import Gui
 
 # Configuración del icono y página
 st.set_page_config(
-    page_title="Project ADA",
-    page_icon="https://www.ucaldas.edu.co/intranet2/wp-content/uploads/2014/10/logo-u2.png",
+    page_title="Grafos",
+    page_icon="https://www.ucaldas.edu.co/intranet2/wp-content/uploads/2014/10  /logo-u2.png",
     layout="wide"
 )
 
@@ -21,6 +25,8 @@ def main():
 
     # Instancia de LogicaPB
     logica_pb = LogicaPB()
+    interfaz = Gui()
+    estrategia1 = Estrategia1()
 
     # Menú de opciones personalizado con tema oscuro
     selected = option_menu(
@@ -39,11 +45,30 @@ def main():
     )
 
     if selected == "Inicio":
-        st.selectbox("Seleccionar opción:", ["Nuevo Grafo", "Abrir", "Buscar Nodo", "Cerrar",
-                     "Guardar", "Guardar Como", "Exportar Datos", "Importar Datos", "Salir"])
+        inicio_options = st.selectbox("Seleccionar opción:", ["Cargar TPM", "Buscar Nodo", "Cerrar",
+                                                              "Guardar", "Guardar Como", "Exportar Datos", "Importar Datos", "Salir"])
+        if inicio_options == 'Cargar TPM':
+            st.title("Carga de Matriz de Transición de Probabilidades")
+            # Componente para cargar un archivo
+            data = st.file_uploader(
+                "Cargar matriz de probabilidades", type=['csv'])
+            if data is not None:
+                # Cargar y cachear la matriz
+                tpm = load_tpm(data)
+
+                if tpm is not None:
+                    st.write("Matriz de Transición de Probabilidades:")
+                    st.write(tpm)
+
+                    # Opciones basadas en los datos de la matriz
+                    st.sidebar.write("Configuración del Análisis")
+                    # Asumiendo que las columnas son los nodos
+                    nodes = list(tpm.columns)
+                    selected_node = st.sidebar.selectbox(
+                        "Escoge un nodo para analizar:", nodes)
 
     elif selected == "Ejecutar":
-        handle_execute(logica_pb)
+        handle_execute(logica_pb, interfaz, estrategia1)
 
     elif selected == 'Ayuda':
         handle_help()
@@ -51,7 +76,7 @@ def main():
     st.write("© 2024 Proyecto ADA. Todos los derechos reservados.")
 
 
-def handle_execute(logica_pb):
+def handle_execute(logica_pb, interfaz, estrategia1):
     selected_option = st.selectbox("Seleccionar opción:", [
                                    "Estrategia1", "Estrategia2"])
     if selected_option == 'Estrategia1':
@@ -63,9 +88,9 @@ def handle_execute(logica_pb):
             opcion = st.radio(
                 "Seleccione la matriz con la que desea trabajar", opciones_matriz)
 
-            estados = logica_pb.retornarEstadosFuturos(
+            futuros = logica_pb.retornarEstadosFuturos(
                 logica_pb.datosMatrices(opcion))
-            futuros = logica_pb.retornarEstados(
+            estados = logica_pb.retornarEstados(
                 logica_pb.datosMatrices(opcion))
             nodosG1 = st.multiselect(
                 "Seleccione los nodos del estado presente", estados)
@@ -73,15 +98,54 @@ def handle_execute(logica_pb):
                 'Seleccione los nodos del estado futuro:', futuros)
             estadoActual = st.selectbox(
                 "Seleccione el estado actual", logica_pb.retornarValorActual(nodosG1, nodosG2, opcion))
-            nodosG1_str = ', '.join(nodosG1)
-            aux2_str = ', '.join(nodosG2)
-            st.latex(
-                r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
+            candidato = st.multiselect(
+                "Seleccione los nodos del sistema candidato", estados)
+            aux2 = []
+            for i in nodosG2:
+                # verificar si el dato tiene ' al final por ejemplo "1'"
+                if "'" in i:
+                    aux2.append(i[:-1])
             if st.button("Iniciar"):
                 st.write("Iniciando estrategia...")
+                st.session_state.nodes, st.session_state.edges = interfaz.generar_grafoBipartito(
+                    nodosG1, nodosG2, Node, Edge)
+                aux2_str = ', '.join(nodosG2)
+                nodosG1_str = ', '.join(nodosG1)
+                st.latex(
+                    r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
+                aux = estrategia1.distribucion_candidatos(
+                    nodosG1, nodosG2, estadoActual, candidato, opcion)
+                nodosG1_str = ', '.join(nodosG1)
+                aux2_str = ', '.join(nodosG2)
+                # Muestra la fórmula de probabilidad condicional con los valores de las variables
+                st.header("Distriución de probabilidad original")
+                st.latex(
+                    r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
+                st.header(
+                    "Distribución de probabilidad despues de elegir el candidato")
+                st.table(aux)
+                st.header("Mejor particion Sustentación Proyecto")
+                particion, d, tiempo, lista = estrategia1.retornar_mejor_particion(
+                    nodosG1, nodosG2, estadoActual, candidato, opcion)
+                st.write(str(particion), d)
+                interfaz.pintarGrafoGenerado(
+                    nodosG1, nodosG2, estadoActual, st.session_state.edges, candidato, Node, Edge, opcion)
+
         elif num_nodos == "N":
             opcion = st.select_slider(
-                "Seleccione la matriz con la que desea trabajar", list(range(6, 200)))
+                "Seleccione la cantidad de nodos que desea usar", list(range(6, 200)))
+            if st.button("Iniciar"):
+                st.write("Iniciando estrategia con ", {opcion}, "nodos...")
+
+
+# Función para cargar y almacenar la matriz en caché
+@st.cache_data
+def load_tpm(data):
+    if data is not None:
+        # Suponiendo que es un archivo CSV
+        return pd.read_csv(data)
+    else:
+        return None
 
 
 def handle_help():
