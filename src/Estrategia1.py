@@ -137,6 +137,8 @@ class Estrategia1:
         st.write('Partición: ', str(particion))
         st.write('Perdida: ', diferencia)
         st.write('Tiempo: ', tiempo)
+        
+    
 
     def calcularEMD(self, p1, p2):
         p1 = np.array(p1)

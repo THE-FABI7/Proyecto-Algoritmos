@@ -36,6 +36,18 @@ class LogicaPB:
         return estados
 
     def generarEstadoTransicion(self, subconjuntos):
+        """
+        Genera el estado de transición para un conjunto de subconjuntos dados.
+        Args:
+            subconjuntos (dict): Un diccionario donde las claves son los estados y los valores son 
+                                 diccionarios que representan las transiciones de estado.
+        Returns:
+            tuple: Una tupla que contiene:
+                - transiciones (dict): Un diccionario donde las claves son tuplas que representan 
+                                       el estado actual y los valores son tuplas que representan 
+                                       el estado futuro.
+                - estados (list): Una lista de los estados presentes en los subconjuntos.
+        """
         estados = list(subconjuntos.keys())
         transiciones = {}
         estado_actual = [0] * len(estados)
@@ -78,6 +90,19 @@ class LogicaPB:
         return lista
 
     def generarDistribucionProbabilidades(self, tabla, estadoActual, estadoFuturo, num, estados):
+        """
+        Genera una distribución de probabilidades basada en el estado actual y futuro.
+        Args:
+            tabla (list): La tabla de datos inicial.
+            estadoActual (list): Lista de estados actuales.
+            estadoFuturo (list): Lista de estados futuros.
+            num (int): Un número utilizado para el cálculo de distribución.
+            estados (list): Lista de todos los estados posibles.
+        Returns:
+            list: Una nueva tabla con la distribución de probabilidades generada.
+        Raises:
+            ValueError: Si algún estado actual no se encuentra en la lista de estados.
+        """
         # indice = [estados.index(i) for i in estadoActual]
         try:
             indice = [estados.index(i) for i in estadoActual]
@@ -102,6 +127,23 @@ class LogicaPB:
         return tabla
 
     def generarTabla(self, distribucion, num, i=0, numBinario='', nuevoValor=1):
+        """
+        Genera una tabla de valores binarios y sus correspondientes valores calculados 
+        a partir de una distribución dada.
+
+        Args:
+            distribucion (list): Una lista de tuplas donde cada tupla contiene información 
+                     relevante para la generación de la tabla.
+            num (int): Un número que puede ser utilizado en el cálculo (no se utiliza en el código actual).
+            i (int, optional): El índice actual en la distribución. Por defecto es 0.
+            numBinario (str, optional): La representación binaria actual en forma de cadena. Por defecto es ''.
+            nuevoValor (int, optional): El valor calculado actual. Por defecto es 1.
+
+        Returns:
+            list: Una lista de dos listas:
+              - La primera lista contiene tuplas de valores binarios generados.
+              - La segunda lista contiene los valores calculados correspondientes a cada tupla binaria.
+        """
         if i == len(distribucion):
             numBinario = '0' * (len(distribucion)-len(numBinario)) + numBinario
             nuevoDato = tuple(int(bit) for bit in numBinario)
@@ -114,6 +156,17 @@ class LogicaPB:
             return [tabla[0]+tabla2[0], tabla[1]+tabla2[1]]
 
     def porcentajeDistribucion(self, tabla, indice, num):
+        """
+        Calcula la distribución porcentual de valores en una tabla basada en un índice y un número dado.
+        Args:
+            tabla (list): Una lista de listas que representa la tabla de datos.
+            indice (list): Una lista de índices que se utilizarán para comparar con los elementos de la tabla.
+            num (list): Una lista de números que se utilizarán para comparar con los elementos de la tabla.
+        Returns:
+            list: Una nueva tabla con la distribución porcentual calculada.
+        Raises:
+            IndexError: Si se produce un error de índice durante la comparación de elementos.
+        """
         tablaNueva = [tabla[0]]
         fila = None
         try:
@@ -135,6 +188,16 @@ class LogicaPB:
         return tablaNueva
 
     def generarTablaComparativa(self, diccionario):
+        """
+        Genera una tabla comparativa a partir de un diccionario dado.
+
+        Args:
+            diccionario (dict): Un diccionario donde las claves son los elementos a comparar y los valores son números.
+
+        Returns:
+            list: Una lista de listas, donde cada sublista contiene una clave del diccionario, su valor asociado, 
+              y la diferencia entre 1 y el valor asociado.
+        """
         lista = [['key', (1,), (0,)]]
         for k, v in diccionario.items():
             lista.append([k, v, 1 - v])

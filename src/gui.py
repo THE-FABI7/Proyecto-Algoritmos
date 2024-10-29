@@ -34,7 +34,7 @@ class Gui:
                       shape=None,
                       x=pos[nodo][0],  # Coordenada x asignada
                       y=pos[nodo][1],  # Coordenada y asignada
-                      color='red' if nodo in nodosG1 else 'yellow')  # Color de nodo
+                      color='red' if nodo in nodosG1 else 'white')  # Color de nodo
                  for nodo in G.nodes()]
 
         # Crear una lista de aristas
@@ -83,13 +83,13 @@ class Gui:
                 for arista in edges:
                     if arista.source == i and arista.to in p2[0]:
                         arista.dashes = True
-                        arista.color = 'rgba(254, 20, 56, 0.5)'
+                        arista.color = 'rgba(255, 0, 169)'
         for i in p2[1]:
             if i not in p1[1]:
                 for arista in edges:
                     if arista.source == i and arista.to in p1[0]:
                         arista.dashes = True
-                        arista.color = 'rgba(254, 20, 56, 0.5)'
+                        arista.color = 'rgba(255, 0, 169)'
 
             config = Config(
                 width='100%',

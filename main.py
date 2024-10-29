@@ -51,7 +51,7 @@ def main():
             st.title("Carga de Matriz de Transición de Probabilidades")
             # Componente para cargar un archivo
             data = st.file_uploader(
-                "Cargar matriz de probabilidades", type=['csv'])
+                "Cargar matriz de probabilidades", type=['xlsx'])
             if data is not None:
                 # Cargar y cachear la matriz
                 tpm = load_tpm(data)
@@ -83,23 +83,25 @@ def handle_execute(logica_pb, interfaz, estrategia1):
         num_nodos = st.selectbox(
             "¿Cuántos nodos quieres trabajar?", ["ejemplos", "N"])
         if num_nodos == "ejemplos":
-            # Asegúrate de que listaMatrices() no esté recibiendo ningún argumento
-            opciones_matriz = logica_pb.listaMatrices()  # Llamada correcta sin argumentos
+            opciones_matriz = logica_pb.listaMatrices()
             opcion = st.radio(
                 "Seleccione la matriz con la que desea trabajar", opciones_matriz)
 
+            candidato = st.multiselect(
+                "Seleccione los nodos del sistema candidato", estados)
             futuros = logica_pb.retornarEstadosFuturos(
                 logica_pb.datosMatrices(opcion))
             estados = logica_pb.retornarEstados(
                 logica_pb.datosMatrices(opcion))
+
+            # condiciones de background a el estado (presente)
+            # marginalizar los futuros (estados)
             nodosG1 = st.multiselect(
                 "Seleccione los nodos del estado presente", estados)
             nodosG2 = st.multiselect(
                 'Seleccione los nodos del estado futuro:', futuros)
             estadoActual = st.selectbox(
                 "Seleccione el estado actual", logica_pb.retornarValorActual(nodosG1, nodosG2, opcion))
-            candidato = st.multiselect(
-                "Seleccione los nodos del sistema candidato", estados)
             aux2 = []
             for i in nodosG2:
                 # verificar si el dato tiene ' al final por ejemplo "1'"
@@ -109,10 +111,10 @@ def handle_execute(logica_pb, interfaz, estrategia1):
                 st.write("Iniciando estrategia...")
                 st.session_state.nodes, st.session_state.edges = interfaz.generar_grafoBipartito(
                     nodosG1, nodosG2, Node, Edge)
-                aux2_str = ', '.join(nodosG2)
-                nodosG1_str = ', '.join(nodosG1)
-                st.latex(
-                    r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
+                # aux2_str = ', '.join(nodosG2)
+                # nodosG1_str = ', '.join(nodosG1)
+                # st.latex(
+                # r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
                 aux = estrategia1.distribucion_candidatos(
                     nodosG1, nodosG2, estadoActual, candidato, opcion)
                 nodosG1_str = ', '.join(nodosG1)
@@ -142,8 +144,9 @@ def handle_execute(logica_pb, interfaz, estrategia1):
 @st.cache_data
 def load_tpm(data):
     if data is not None:
-        # Suponiendo que es un archivo CSV
-        return pd.read_csv(data)
+        # Suponiendo que es un archivo excel
+        # x
+        return pd.read_excel(data)
     else:
         return None
 
