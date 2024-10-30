@@ -87,15 +87,17 @@ def handle_execute(logica_pb, interfaz, estrategia1):
             opcion = st.radio(
                 "Seleccione la matriz con la que desea trabajar", opciones_matriz)
 
-            candidato = st.multiselect(
-                "Seleccione los nodos del sistema candidato", estados)
+            
             futuros = logica_pb.retornarEstadosFuturos(
                 logica_pb.datosMatrices(opcion))
             estados = logica_pb.retornarEstados(
                 logica_pb.datosMatrices(opcion))
+            
+            #condiciones de background a el estado (presente)
+            #marginalizar los futuros (estados) 
+            candidato = st.multiselect(
+                "Seleccione los nodos del sistema candidato", estados)
 
-            # condiciones de background a el estado (presente)
-            # marginalizar los futuros (estados)
             nodosG1 = st.multiselect(
                 "Seleccione los nodos del estado presente", estados)
             nodosG2 = st.multiselect(
@@ -114,7 +116,7 @@ def handle_execute(logica_pb, interfaz, estrategia1):
                 # aux2_str = ', '.join(nodosG2)
                 # nodosG1_str = ', '.join(nodosG1)
                 # st.latex(
-                # r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
+                    # r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
                 aux = estrategia1.distribucion_candidatos(
                     nodosG1, nodosG2, estadoActual, candidato, opcion)
                 nodosG1_str = ', '.join(nodosG1)
@@ -145,7 +147,7 @@ def handle_execute(logica_pb, interfaz, estrategia1):
 def load_tpm(data):
     if data is not None:
         # Suponiendo que es un archivo excel
-        # x
+        #x
         return pd.read_excel(data)
     else:
         return None
