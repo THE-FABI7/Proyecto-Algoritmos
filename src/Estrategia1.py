@@ -170,8 +170,6 @@ class Estrategia1:
         # Calcular y retornar EMD
         return emd(p1_array, p2_array, cost_matrix)
 
-   
-
     def hamming_distance(a: int, b: int):
         return (a ^ b).bit_count()
 
@@ -266,3 +264,8 @@ class Estrategia1:
             tabla[key] = LogicaPB.generarDistribucionProbabilidades(
                 self, matrices, c1, c2, estadoActual, estados)
         return tabla[key]
+    
+    def estrategia_uno(self, matrices, c1, c2, estadoAct):
+        print("A qui  va la estrategia de la profesora xd !!....")
+
+    

@@ -1542,6 +1542,7 @@ class Datos:
         ]
         letras = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
         return self.retornarDatosMatrizPrueba(matrizDiezNodos, 10, letras)
+    
     def retornarDatosMatrizPrueba(self, matriz, bits, letras):
         # La matriz de entrada
         matriz2 =[

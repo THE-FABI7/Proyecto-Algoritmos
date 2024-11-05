@@ -128,13 +128,15 @@ def handle_execute(logica_pb, interfaz, estrategia1):
                 st.header(
                     "Distribución de probabilidad despues de elegir el candidato")
                 st.table(aux)
-                st.header("Mejor particion Sustentación Proyecto")
+                st.header("Mejor Particion")
                 particion, d, tiempo, lista = estrategia1.retornar_mejor_particion(
                     nodosG1, nodosG2, estadoActual, candidato, opcion)
                 st.write(str(particion), d)
+                st.write("Tiempo de ejecución: ", tiempo)
                 interfaz.pintarGrafoGenerado(
                     nodosG1, nodosG2, estadoActual, st.session_state.edges, candidato, Node, Edge, opcion)
-
+                
+            
         elif num_nodos == "N":
             opcion = st.select_slider(
                 "Seleccione la cantidad de nodos que desea usar", list(range(6, 200)))

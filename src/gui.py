@@ -1,4 +1,5 @@
 import random
+from turtle import st
 import networkx as nx
 from src.Estrategia1 import Estrategia1
 from src.LogicaPB import LogicaPB
@@ -68,7 +69,6 @@ class Gui:
                         arista.color = 'rgba(254, 20, 56, 0.5)'
 
     def pintarGrafoGenerado(self, c1, c2, estadoActual, edges, candidato, Node, Edge, opcion):
-
         mP, a, b, c = Estrategia1.retornar_mejor_particion(
             self, c1, c2, estadoActual, candidato, opcion)
         matrices = LogicaPB.datosMatrices(self, opcion)

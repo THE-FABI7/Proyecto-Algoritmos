@@ -11,8 +11,8 @@ class LogicaPB:
         cuatro = datos.retornarDatosCuatroNodos()
         cinco = datos.retornarDatosCincoNodos()
         seis = datos.retornarDatosSeisNodos()
-        # ocho = datos.retornarDatosMatrizOchoNodos()
-        # diez = datos.retornarDatosMatrizDiezNodos()
+        ocho = datos.retornarDatosMatrizOchoNodos()
+        diez = datos.retornarDatosMatrizDiezNodos()
         salida = None
         if opcion == "Tres Nodos":
             salida = tres
@@ -22,10 +22,10 @@ class LogicaPB:
             salida = cinco
         elif opcion == "Seis Nodos":
             salida = seis
-        # elif opcion == "Ocho Nodos":
-            # salida = ocho
-        # elif opcion == "Diez Nodos":
-            # salida = diez
+        elif opcion == "Ocho Nodos":
+            salida = ocho
+        elif opcion == "Diez Nodos":
+            salida = diez
         return salida
 
     def listaMatrices(self):
