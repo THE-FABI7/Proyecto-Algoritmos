@@ -113,10 +113,6 @@ def handle_execute(logica_pb, interfaz, estrategia1):
                 st.write("Iniciando estrategia...")
                 st.session_state.nodes, st.session_state.edges = interfaz.generar_grafoBipartito(
                     nodosG1, nodosG2, Node, Edge)
-                # aux2_str = ', '.join(nodosG2)
-                # nodosG1_str = ', '.join(nodosG1)
-                # st.latex(
-                    # r'P(\{' + aux2_str + r'\}^{t+1} | \{' + nodosG1_str + r'\}^{t})')
                 aux = estrategia1.distribucion_candidatos(
                     nodosG1, nodosG2, estadoActual, candidato, opcion)
                 nodosG1_str = ', '.join(nodosG1)

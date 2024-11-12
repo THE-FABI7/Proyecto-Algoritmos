@@ -13,6 +13,7 @@ class LogicaPB:
         seis = datos.retornarDatosSeisNodos()
         ocho = datos.retornarDatosMatrizOchoNodos()
         diez = datos.retornarDatosMatrizDiezNodos()
+        quince = datos.retornarQuinceNodos()
         salida = None
         if opcion == "Tres Nodos":
             salida = tres
@@ -26,10 +27,12 @@ class LogicaPB:
             salida = ocho
         elif opcion == "Diez Nodos":
             salida = diez
+        elif opcion == "Quince Nodos":
+            salida = quince
         return salida
 
     def listaMatrices(self):
-        return ["Tres Nodos", "Cuatro Nodos", "Cinco Nodos", "Seis Nodos", "Ocho Nodos", "Diez Nodos"]
+        return ["Tres Nodos", "Cuatro Nodos", "Cinco Nodos", "Seis Nodos", "Ocho Nodos", "Diez Nodos", "Quince Nodos"]
 
     def retornarEstados(self, datos):
         resultado, estados = LogicaPB.generarEstadoTransicion(self, datos)
@@ -48,6 +51,7 @@ class LogicaPB:
                                        el estado futuro.
                 - estados (list): Una lista de los estados presentes en los subconjuntos.
         """
+        print(subconjuntos.keys())
         estados = list(subconjuntos.keys())
         transiciones = {}
         estado_actual = [0] * len(estados)
