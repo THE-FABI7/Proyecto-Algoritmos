@@ -146,28 +146,21 @@ class Estrategia1:
         La matriz de costos se genera utilizando la distancia de Hamming.
         """
 
-        # Convertir listas a arrays de NumPy
-        p1_array: NDArray[np.float64] = np.array(p1, dtype=np.float64)
-        p2_array: NDArray[np.float64] = np.array(p2, dtype=np.float64)
-
-        # Asegurar que ambos vectores sean unidimensionales
-        if p1_array.ndim != 1 or p2_array.ndim != 1:
-            raise ValueError("Ambos vectores deben ser unidimensionales.")
-
-        # Interpolación si las longitudes son diferentes
-        if len(p1_array) != len(p2_array):
-            p2_array = np.interp(np.linspace(0, 1, len(p1_array)),
-                                 np.linspace(0, 1, len(p2_array)), p2_array)
 
         # Crear la matriz de costos usando la distancia de Hamming
-        n: int = len(p1_array)
-        cost_matrix: NDArray[np.float64] = np.empty((n, n), dtype=np.float64)
+        n: int = len(p1)
+        costs: NDArray[np.float64] = np.empty((n, n))
 
         for i in range(n):
-            for j in range(n):
-                cost_matrix[i, j] = Estrategia1.hamming_distance(i, j)
+            costs[i, :i] = [Estrategia1.hamming_distance(i, j) for j in range(i)]
+            costs[:i, i] = costs[i, :i]
+        np.fill_diagonal(costs, 0)
 
-        # Calcular y retornar EMD
+        cost_matrix: NDArray[np.float64] = np.array(costs, dtype=np.float64)
+        # Convertir p1 y p2 a numpy.ndarray
+        p1_array = np.array(p1, dtype=np.float64)
+        p2_array = np.array(p2, dtype=np.float64)
+            # Calcular y retornar EMD
         return emd(p1_array, p2_array, cost_matrix)
 
     def hamming_distance(a: int, b: int):
